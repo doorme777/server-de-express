@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = 3001;
 const products = [
   {
     id: 1,
@@ -31,6 +31,17 @@ app.get('/', (req, res) => {
 // Obtener todos los productos (GET)
 app.get('/productos', (req, res) => {
   res.json(products);
+});
+
+app.get('/categories/:id', (req, res) => {
+  const categoryId = req.params.id;
+  res.json([
+    {
+      id: categoryId,
+      name: 'Santa',
+      products: ['duendes', 'xd', 'regalos'],
+    },
+  ]);
 });
 
 // Obtener solo un producto (GET)
@@ -65,15 +76,24 @@ app.put('/productos/:id', (req, res) => {
 
 // Creación (POST)
 app.post('/productos', (req, res) => {
-  const id = req.body.id;
-  const nombre = req.body.nombre;
+  const result = req.body;
 
-  const nuevoProducto = { id, nombre };
+  res.json({
+    message: 'Producto creado con éxito',
+    data: {
+      result,
+    },
+  });
+  products.push(result);
 
-  products.push(nuevoProducto);
-
-  res.status(201).json(nuevoProducto);
+  res.status(201).json(result);
 });
+
+// {
+//   id: 1,
+//   description: 'Product for e-commerce',
+//   price: '10',
+// },
 
 // Eliminación (DELETE)
 app.delete('/productos/:id', (req, res) => {
