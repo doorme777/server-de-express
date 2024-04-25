@@ -9,6 +9,7 @@
     "format": "prettier --write ."
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "eslint": "^9.1.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
