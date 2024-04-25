@@ -1,5 +1,6 @@
 const express = require('express');
 const faker = require('faker');
+// const process = require('process');
 
 const routes = express();
 
@@ -39,6 +40,15 @@ routes.get('/:id', (req, res) => {
   }
 
   res.json(producto);
+});
+
+// Creación (POST)
+routes.post('/', (req, res) => {
+  const body = req.body;
+  res.json({
+    message: 'created',
+    data: body,
+  });
 });
 
 module.exports = routes;

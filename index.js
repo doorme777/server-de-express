@@ -3,6 +3,8 @@ const app = express();
 const routerApi = require('./routes/index');
 const port = 3002;
 
+app.use(express.json());
+
 routerApi(app);
 
 // app.get('/users', (req, res) => {
