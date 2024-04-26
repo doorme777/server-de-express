@@ -1,27 +1,21 @@
 const express = require('express');
 const faker = require('faker');
+const producService = require('./../services/product.service');
 // const process = require('process');
 
 const routes = express();
+const service = new producService();
+service.generate();
 
 // Obtener todos los productos (GET)
-routes.get('/', (req, res) => {
-  const products = [];
-  const { size } = req.query;
-  const limit = size || 10;
-  for (let index = 0; index < limit; index++) {
-    products.push({
-      name: faker.commerce.productName(),
-      price: parseInt(faker.commerce.price(), 10),
-      image: faker.image.imageUrl(),
-    });
-  }
+routes.get('/', async (req, res) => {
+  products = await service.find();
   res.json(products);
 });
 
-routes.get('/filter', (req, res) => {
+routes.get('/filter', async (req, res) => {
   const id = req.params.id;
-  const product = products.find((p) => p.id === id);
+  const product = await products.find((p) => p.id === id);
   if (!product) {
     return res.status(404).json({ error: 'Producto no encontrado' });
   }
@@ -29,52 +23,40 @@ routes.get('/filter', (req, res) => {
 });
 
 // //  Obtener solo un producto (GET)
-routes.get('/:id', (req, res) => {
-  // Obtener el id de los parámetros
-  const id = req.params.id;
+routes.get('/:id', async (req, res) => {
+  const product = await service.findOne(req.params.id);
 
-  // Buscar el producto con el id correspondiente
-  // const producto = products.find((p) => p.id === id);
-  if (id === '999') {
-    return res.status(404).json({ error: 'Producto no encontrado' });
-  }
-
-  res.json({
-    id,
-    name: faker.commerce.productName(),
-    price: parseInt(faker.commerce.price(), 10),
-    image: faker.image.imageUrl(),
-  });
+  res.json(product);
 });
 
 // Creación (POST)
-routes.post('/', (req, res) => {
+routes.post('/', async (req, res) => {
   const body = req.body;
+  const product = await service.create(body);
   res.status(201).json({ 'Todo bien compañerrito': body });
 
   res.json({
     message: 'created',
-    data: body,
+    data: product,
   });
 });
 
 // Actualización (PATCH)
-routes.patch('/:id', (req, res) => {
+routes.patch('/:id', async (req, res) => {
   const id = req.params.id;
   const body = req.body;
+  const product = await service.update(id, body);
   res.json({
     message: 'updated',
-    data: body,
+    data: product,
   });
 });
 
 // Eliminación (DELETE)
-routes.delete('/:id', (req, res) => {
+routes.delete('/:id', async (req, res) => {
   const id = req.params.id;
-  res.json({
-    message: 'deleted',
-    id,
-  });
+  const deleteProduct = await service.delete(id);
+  res.json(deleteProduct);
 });
 
 module.exports = routes;
