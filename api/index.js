@@ -9,7 +9,7 @@ const {
 } = require('./middleware/error.handler');
 const port = 3003;
 
-const whitelist = ['http://localhost:8080', 'https://myapp.co'];
+const whitelist = ['http://localhost:3003', 'https://myapp.co'];
 const options = {
   origin: (origin, callback) => {
     if (whitelist.includes(origin)) {
@@ -19,7 +19,7 @@ const options = {
     }
   },
 };
-app.use(cors());
+app.use(cors(options));
 
 app.use(express.json());
 
