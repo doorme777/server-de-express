@@ -9,7 +9,10 @@ const {
 } = require('./middleware/error.handler');
 const port = 3003;
 
-const whitelist = ['http://localhost:3003', 'https://myapp.co'];
+const whitelist = [
+  'http://localhost:3003',
+  'https://server-de-express.vercel.app/',
+];
 const options = {
   origin: (origin, callback) => {
     if (whitelist.includes(origin)) {
