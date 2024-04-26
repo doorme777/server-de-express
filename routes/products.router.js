@@ -1,6 +1,11 @@
 const express = require('express');
 const producService = require('./../services/product.service');
-// const process = require('process');
+const validatorHandler = require('./../middleware/validator.handler');
+const {
+  createProductSchema,
+  updateProductSchema,
+  getProductSchema,
+} = require('./../schemas/product.schema');
 
 const routes = express();
 const service = new producService();
@@ -17,34 +22,47 @@ routes.get('/filter', async (req, res, next) => {
 });
 
 // //  Obtener solo un producto (GET)
-routes.get('/:id', async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const product = await service.findOne(id);
-    res.json(product);
-  } catch (error) {
-    next(error);
-  }
-});
+routes.get(
+  '/:id',
+  validatorHandler(getProductSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const product = await service.findOne(id);
+      res.json(product);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 // Creación (POST)
-routes.post('/', async (req, res) => {
-  const body = req.body;
-  const product = await service.create(body);
-  res.status(201).json(product);
-});
+routes.post(
+  '/',
+  validatorHandler(createProductSchema, 'body'),
+  async (req, res) => {
+    const body = req.body;
+    const product = await service.create(body);
+    res.status(201).json(product);
+  },
+);
 
 // Actualización (PATCH)
-routes.patch('/:id', async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const body = req.body;
-    const product = await service.update(id, body);
-    res.json(product);
-  } catch (error) {
-    next(error);
-  }
-});
+routes.patch(
+  '/:id',
+  validatorHandler(getProductSchema, 'params'),
+  validatorHandler(updateProductSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const product = await service.update(id, body);
+      res.json(product);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 // Eliminación (DELETE)
 routes.delete('/:id', async (req, res) => {
