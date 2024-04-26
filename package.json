@@ -4,8 +4,8 @@
   "description": "A simple Express API",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.js",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
@@ -22,7 +22,12 @@
     "cors": "^2.8.5",
     "express": "^4.19.2"
   },
-  "keywords": [],
+  "keywords": [
+    "express",
+    "nodejs",
+    "api",
+    "rest"
+  ],
   "author": "",
   "license": "ISC"
 }
